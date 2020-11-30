@@ -54,8 +54,8 @@ export const DashboardLayout = ({ children }) => {
             <Transition
               show={true}
               entering="transition-opacity ease-linear duration-300"
-              enteringFrom="opacity-0"
-              enteringTo="opacity-100"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
             >
               <div className="fixed inset-0">
                 sfesfsef
@@ -69,11 +69,11 @@ export const DashboardLayout = ({ children }) => {
             <Transition
               show={true}
               entering="transition ease-in-out duration-300 transform"
-              enteringFrom="-translate-x-full"
+              enterFrom="-translate-x-full"
               enteringTo="translate-x-0"
               leaving="transition ease-in-out duration-300 transform"
-              leavingFrom="translate-x-0"
-              leavingTo="-translate-x-full"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
             >
               <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-cyan-700">
                 <div className="absolute top-0 right-0 -mr-12 pt-2">
@@ -566,7 +566,7 @@ export const DashboardLayout = ({ children }) => {
                     enterTo="transform opacity-100 scale-100"
                     leaving="transition ease-in duration-75"
                     leavingFrom="transform opacity-100 scale-100"
-                    leavingTo="transform opacity-0 scale-95"
+                    leaveTo="transform opacity-0 scale-95"
                   >
                     <div
                       className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"

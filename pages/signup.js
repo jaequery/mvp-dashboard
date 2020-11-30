@@ -1,5 +1,22 @@
+import { Formik } from 'formik';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+
 import { AuthLayout } from '../components/layouts/AuthLayout';
+import { api } from '../hooks/api.hooks';
+
 export default function SignupPage() {
+  const [error, setError] = useState('');
+  const [createUser, createUserRes] = api('post', '/users');
+  useEffect(() => {
+    setError();
+    if (createUserRes.error) {
+      if (createUserRes.error.response.status == 409) {
+        setError('We found an existing email, please try logging in');
+      }
+    }
+  }, [createUserRes]);
   return (
     <AuthLayout>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -9,94 +26,134 @@ export default function SignupPage() {
           alt="Workflow"
         />
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
+          Register a new account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600 max-w">
           Or
-          <Link href="/signup">
+          <Link href="/signin">
             <a
               href="#"
               className="font-medium text-cyan-600 hover:text-cyan-500"
             >
-              &nbsp;start your 14-day free trial
+              &nbsp;sign in to access your account
             </a>
           </Link>
         </p>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" action="#" method="POST">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember_me"
-                  name="remember_me"
-                  type="checkbox"
-                  className="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember_me"
-                  className="ml-2 block text-sm text-gray-900"
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            onSubmit={(values) => {
+              createUser(values);
+            }}
+            validationSchema={Yup.object({
+              email: Yup.string().required().email(),
+              password: Yup.string().required().min(8),
+            })}
+          >
+            {({ getFieldProps, handleSubmit, touched, errors }) => {
+              return (
+                <form
+                  className="space-y-6"
+                  method="POST"
+                  onSubmit={handleSubmit}
+                  noValidate
                 >
-                  Remember me
-                </label>
-              </div>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:text-cyan-500"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-            </div>
-            <div>
-              <Link href="/dashboard">
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                >
-                  Sign in
-                </button>
-              </Link>
-            </div>
-          </form>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Email address
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        {...getFieldProps('email')}
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                        placeholder="Enter your email address"
+                      />
+                    </div>
+                    {touched.email && errors.email && (
+                      <div className="mt-2 text-center text-sm text-red-400">
+                        {errors.email}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Password
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        required
+                        {...getFieldProps('password')}
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
+                        placeholder="Password (min. 6 characters)"
+                      />
+                    </div>
+                    {touched.password && errors.password && (
+                      <div className="mt-2 text-center text-sm text-red-400">
+                        {errors.password}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <input
+                        id="remember_me"
+                        name="remember_me"
+                        type="checkbox"
+                        className="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded"
+                      />
+                      <label
+                        htmlFor="remember_me"
+                        className="ml-2 block text-sm text-gray-900"
+                      >
+                        Remember me
+                      </label>
+                    </div>
+                    <div className="text-sm">
+                      <a
+                        href="#"
+                        className="font-medium text-cyan-600 hover:text-cyan-500"
+                      >
+                        Forgot your password?
+                      </a>
+                    </div>
+                  </div>
+                  <div>
+                    {createUserRes.isLoading && (
+                      <button className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-cyan-800 bg-white  ">
+                        registering ...
+                      </button>
+                    )}
+
+                    {!createUserRes.isLoading && (
+                      <button className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                        Sign Up
+                      </button>
+                    )}
+                  </div>
+                </form>
+              );
+            }}
+          </Formik>
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -167,6 +224,11 @@ export default function SignupPage() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="text-center mt-4 text-red-400">
+          {createUserRes.error && (
+            <h3>{error ? error : 'There was an error, please try again'}</h3>
+          )}
         </div>
       </div>
     </AuthLayout>

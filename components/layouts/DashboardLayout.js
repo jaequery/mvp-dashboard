@@ -336,6 +336,11 @@ export const DashboardLayout = ({ children }) => {
               <div className="flex items-center flex-shrink-0 px-4 mt-4 mb-8">
                 <Link href="/">
                   <h3 className="cursor-pointer text-white text-xl">
+                    {/* <img
+                      className="mx-auto h-12 w-auto"
+                      src="https://tailwindui.com/img/logos/workflow-mark-cyan-600.svg"
+                      alt="Workflow"
+                    />{' '} */}
                     <img className="h-16" src="/images/logo.png" /> MVPKit
                   </h3>
                 </Link>

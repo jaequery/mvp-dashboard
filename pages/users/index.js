@@ -1,6 +1,11 @@
 import { DashboardLayout } from '../../components/layouts/DashboardLayout';
+import { format } from 'date-fns';
 import Link from 'next/link';
+import { api } from '../../hooks/api.hooks';
+
 export default function UsersPage() {
+  const usersRes = api('get', '/users');
+
   return (
     <DashboardLayout>
       <main className="flex-1 relative pb-8 z-0 overflow-y-auto">
@@ -19,19 +24,25 @@ export default function UsersPage() {
                         alt
                       />
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                        Users Dashboard
+                        List of Users
                       </h1>
                     </div>
                     <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                      <dt className="sr-only">Company</dt>
-
-                      <dt className="sr-only">Account status</dt>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
-                        {/* <select class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                          <option>filter by status</option>
+                        <input
+                          type="text"
+                          name="email"
+                          id="email"
+                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                          placeholder="search by name, email"
+                        />
+                      </dd>
+                      <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
+                        <select class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                          <option selected>- filter by status -</option>
                           <option>Active</option>
                           <option>Inactive</option>
-                        </select> */}
+                        </select>
                       </dd>
                     </dl>
                   </div>
@@ -121,73 +132,74 @@ export default function UsersPage() {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col mt-2">
                 <div className="align-middle min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200">
+                  <table className="table-auto min-w-full divide-y divide-gray-200">
                     <thead>
                       <tr>
                         <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           #
                         </th>
                         <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Email
+                        </th>
+                        <th className="px-6 py-3 w-1/4 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Name
                         </th>
-                        <th className="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Amount
-                        </th>
                         <th className="hidden px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:block">
-                          Status
+                          Role
                         </th>
-                        <th className="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Date
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      <tr className="bg-white">
-                        <td className="max-w-0 px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          <div className="flex">
-                            <Link href="/users/3">
-                              <a
-                                href="#"
-                                className="group inline-flex space-x-2 truncate text-sm"
-                              >
-                                <p className="text-gray-800 truncate group-hover:text-black">
-                                  1
-                                </p>
-                              </a>
-                            </Link>
-                          </div>
-                        </td>
 
-                        <td className="max-w-0 w-full px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          <div className="flex">
-                            <Link href="/users/3">
-                              <a
-                                href="#"
-                                className="group inline-flex space-x-2 truncate text-sm"
-                              >
-                                <p className="text-gray-800 truncate group-hover:text-black">
-                                  Jae Lee
-                                </p>
-                              </a>
-                            </Link>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                          <span className="text-gray-900 font-medium">
-                            $20,000{' '}
-                          </span>
-                          USD
-                        </td>
-                        <td className="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 md:block">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize">
-                            success
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                          July 11, 2020
-                        </td>
-                      </tr>
-                      {/* More rows... */}
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {usersRes?.data?.map((user) => (
+                        <tr className="bg-white">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <div className="flex">
+                              <Link href="/users/3">
+                                <a
+                                  href="#"
+                                  className="group inline-flex space-x-2 truncate text-sm"
+                                >
+                                  <p className="text-gray-800 truncate group-hover:text-black">
+                                    {user.id}
+                                  </p>
+                                </a>
+                              </Link>
+                            </div>
+                          </td>
+
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <div className="flex">
+                              <Link href={`/users/${user.id}`}>
+                                <a
+                                  href="#"
+                                  className="group inline-flex space-x-2 truncate text-sm"
+                                >
+                                  <span className="text-gray-900 font-medium">
+                                    {user.email}
+                                  </span>
+                                </a>
+                              </Link>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {user.firstName} {user.lastName}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 md:block">
+                            {user.roles.map((role) => (
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize mr-2">
+                                {role}
+                              </span>
+                            ))}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {format(new Date(user.createdAt), 'MM/dd/yyyy')}
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                   {/* Pagination */}

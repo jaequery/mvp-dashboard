@@ -50,7 +50,7 @@ export const DashboardLayout = ({ children }) => {
       >
         {/* Off-canvas menu for mobile, show/hide based on off-canvas menu state. */}
         <div className="lg:hidden">
-          <div className="fixed inset-0 flex z-40">
+          <div className="fixed inset-0 flex z-10">
             <Transition
               show={true}
               entering="transition-opacity ease-linear duration-300"
@@ -70,7 +70,7 @@ export const DashboardLayout = ({ children }) => {
               show={true}
               entering="transition ease-in-out duration-300 transform"
               enterFrom="-translate-x-full"
-              enteringTo="translate-x-0"
+              enterTo="translate-x-0"
               leaving="transition ease-in-out duration-300 transform"
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
@@ -341,7 +341,12 @@ export const DashboardLayout = ({ children }) => {
                       src="https://tailwindui.com/img/logos/workflow-mark-cyan-600.svg"
                       alt="Workflow"
                     />{' '} */}
-                    <img className="h-16" src="/images/logo.png" /> MVPKit
+                    <img
+                      className="m-auto mb-4 h-16"
+                      src="/images/unicorn.svg"
+                    />{' '}
+                    Company
+                    {/* <img className="h-16" src="/images/logo.png" /> MVPKit */}
                   </h3>
                 </Link>
               </div>

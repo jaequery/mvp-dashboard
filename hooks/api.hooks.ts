@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryCache, QueryCache } from 'react-query';
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const headers = {};
 const axiosInstance = axios.create({
@@ -9,24 +9,49 @@ const axiosInstance = axios.create({
 export default axiosInstance;
 
 export const api = (method, url) => {
-  switch (method.toLowerCase()) {
+  method = method.toLowerCase();
+  const cache = useQueryCache();
+  const key = url;
+
+  switch (method) {
     case 'post':
-      return useMutation((payload) => {
-        return axiosInstance.post(url, payload);
-      });
+      return useMutation(
+        (payload) => {
+          return axiosInstance.post(url, payload);
+        },
+        {
+          onSuccess: () => {
+            cache.invalidateQueries(key);
+          },
+        },
+      );
 
     case 'patch':
-      return useMutation((payload) => {
-        return axiosInstance.patch(url, payload);
-      });
+      return useMutation(
+        (payload) => {
+          return axiosInstance.patch(url, payload);
+        },
+        {
+          onSuccess: () => {
+            cache.invalidateQueries(key);
+          },
+        },
+      );
 
     case 'delete':
-      return useMutation((payload) => {
-        return axiosInstance.delete(url, payload);
-      });
+      return useMutation(
+        (payload) => {
+          return axiosInstance.delete(url, payload);
+        },
+        {
+          onSuccess: () => {
+            cache.invalidateQueries(key);
+          },
+        },
+      );
 
     case 'get':
-      return useQuery(url, async () => {
+      return useQuery(key, async () => {
         const res = await axiosInstance.get(url);
         return res.data;
       });

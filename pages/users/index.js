@@ -1,4 +1,4 @@
-import { DashboardLayout } from '../../components/layouts/DashboardLayout';
+import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { api } from '../../hooks/api.hooks';
@@ -21,7 +21,6 @@ export default function UsersPage() {
                       <img
                         className="h-16 w-16 rounded-full sm:hidden"
                         src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.6&w=256&h=256&q=80"
-                        alt
                       />
                       <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                         List of Users
@@ -33,12 +32,12 @@ export default function UsersPage() {
                           type="text"
                           name="email"
                           id="email"
-                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                           placeholder="search by name, email"
                         />
                       </dd>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
-                        <select class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <select className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                           <option selected>- filter by status -</option>
                           <option>Active</option>
                           <option>Inactive</option>

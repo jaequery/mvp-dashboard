@@ -2,9 +2,12 @@ import axios from 'axios';
 import { useMutation, useQuery, useQueryCache, QueryCache } from 'react-query';
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const headers = {};
+import Cookies from 'js-cookie';
 const axiosInstance = axios.create({
   baseURL: baseUrl,
-  headers,
+  headers: {
+    Authorization: `Bearer ${Cookies.get('accessToken')}`,
+  },
 });
 export default axiosInstance;
 

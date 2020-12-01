@@ -4,16 +4,14 @@ import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import { AuthLayout } from '../components/layouts/AuthLayout';
-import { api } from '../hooks/api.hooks';
+import { useUser } from '../hooks/user.hooks';
 
 export default function SigninPage() {
   const [error, setError] = useState('');
-  const [login, loginRes] = api('post', '/auth/login');
+  const { user, login, loginRes } = useUser();
+
   useEffect(() => {
     setError('');
-    if (loginRes.data) {
-      alert('im good');
-    }
     if (loginRes.error) {
       if (loginRes.error.response.status !== 200) {
         setError('Invalid login, please try logging in');
@@ -51,6 +49,7 @@ export default function SigninPage() {
               password: '',
             }}
             onSubmit={(values) => {
+              console.log('onsubmit values', values);
               login(values);
             }}
             validationSchema={Yup.object({

@@ -2,7 +2,7 @@ import { Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { DashboardLayout } from '../../components/layouts/DashboardLayout';
+import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { Modal } from '../../components/Modal';
 import { api } from '../../hooks/api.hooks';
 

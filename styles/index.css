@@ -21,3 +21,17 @@ body {
 /* Stop purging. */
 
 /* Your own custom utilities */
+.tab {
+  @apply group rounded-md px-3 py-2 flex items-center text-sm font-medium text-gray-900 hover:text-gray-900 hover:bg-gray-50;
+}
+
+.tab.active {
+  @apply group bg-gray-50 rounded-md px-3 py-2 flex items-center text-sm font-medium text-cyan-700 hover:text-cyan-700 hover:bg-white;
+}
+
+.tab-icon {
+  @apply flex-shrink-0 -ml-1 mr-3 h-6 w-6 text-gray-400 group-hover:text-gray-500;
+}
+.tab-icon.active {
+  @apply flex-shrink-0 -ml-1 mr-3 h-6 w-6 text-cyan-500 group-hover:text-cyan-500;
+}

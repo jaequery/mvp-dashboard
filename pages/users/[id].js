@@ -32,17 +32,7 @@ export default function UserPage() {
         {userRes.isLoading && <h3>Is loading</h3>}
         {!userRes.isLoading && userRes.data.id && (
           <Formik
-            initialValues={{
-              firstName: userRes.data.firstName || '',
-              lastName: userRes.data.lastName || '',
-              email: userRes.data.email || '',
-              street1: userRes.data.street1 || '',
-              street2: userRes.data.street2 || '',
-              city: userRes.data.city || '',
-              state: userRes.data.state || '',
-              zip: userRes.data.zip || '',
-              country: userRes.data.country || '',
-            }}
+            initialValues={{ ...userRes.data }}
             onSubmit={(values) => {
               saveUser(values);
             }}
@@ -217,7 +207,7 @@ export default function UserPage() {
                                 be careful what you share.
                               </p>
                             </div>
-                            <div className="grid grid-cols-3 gap-6">
+                            <div className="grid grid-cols-4 gap-6">
                               <div className="col-span-3 sm:col-span-2">
                                 <label
                                   htmlFor="company_website"
@@ -228,11 +218,12 @@ export default function UserPage() {
                                 <div className="mt-1 rounded-md shadow-sm flex">
                                   <input
                                     type="text"
+                                    disabled
                                     name="email"
                                     id="email"
                                     {...getFieldProps('email')}
                                     autoComplete="email"
-                                    className="focus:ring-cyan-500 focus:border-cyan-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                                    className="bg-gray-100 focus:ring-cyan-500 focus:border-cyan-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
                                   />
                                 </div>
                               </div>
@@ -322,9 +313,9 @@ export default function UserPage() {
                                   {...getFieldProps('country')}
                                   className="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                 >
-                                  <option>United States</option>
-                                  <option>Canada</option>
-                                  <option>Mexico</option>
+                                  <option value="US">United States</option>
+                                  <option value="CA">Canada</option>
+                                  <option value="MX">Mexico</option>
                                 </select>
                               </div>
                               <div className="col-span-6">

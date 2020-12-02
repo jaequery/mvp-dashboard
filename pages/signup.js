@@ -1,13 +1,17 @@
 import { Formik } from 'formik';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import { AuthLayout } from '../components/layouts/AuthLayout';
 import { api } from '../hooks/api.hooks';
+import { useUser } from '../hooks/user.hooks';
 
 export default function SignupPage() {
+  const router = useRouter();
   const [error, setError] = useState('');
+  const { login, loginRes } = useUser();
   const [createUser, createUserRes] = api('post', '/users');
   useEffect(() => {
     setError();
@@ -16,7 +20,7 @@ export default function SignupPage() {
         setError('We found an existing email, please try logging in');
       }
     }
-  }, [createUserRes]);
+  }, [createUserRes, loginRes]);
   return (
     <AuthLayout>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -47,12 +51,15 @@ export default function SignupPage() {
               email: '',
               password: '',
             }}
-            onSubmit={(values) => {
-              createUser(values);
+            onSubmit={async (values) => {
+              const userRes = await createUser(values);
+              if (userRes.data) {
+                await login(values);
+              }
             }}
             validationSchema={Yup.object({
               email: Yup.string().required().email(),
-              password: Yup.string().required().min(8),
+              password: Yup.string().required().min(6),
             })}
           >
             {({ getFieldProps, handleSubmit, touched, errors }) => {

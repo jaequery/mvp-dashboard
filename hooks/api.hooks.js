@@ -1,26 +1,30 @@
 import axios from 'axios';
-import { useMutation, useQuery, useQueryCache, QueryCache } from 'react-query';
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const headers = {};
 import Cookies from 'js-cookie';
-const axiosInstance = axios.create({
+import { useState } from 'react';
+import { useMutation, useQuery, useQueryCache } from 'react-query';
+
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+const axiosConfig = {
   baseURL: baseUrl,
-  headers: {
-    Authorization: `Bearer ${Cookies.get('accessToken')}`,
-  },
-});
-export default axiosInstance;
+  headers: {},
+};
 
 export const api = (method, url) => {
   method = method.toLowerCase();
   const cache = useQueryCache();
   const key = url;
 
+  const [accessToken, setAccessToken] = useState(Cookies.get('accessToken'));
+  if (accessToken) {
+    axiosConfig.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
   switch (method) {
     case 'post':
       return useMutation(
         (payload) => {
-          return axiosInstance.post(url, payload);
+          return axios.post(url, payload, axiosConfig);
         },
         {
           onSuccess: () => {
@@ -32,7 +36,7 @@ export const api = (method, url) => {
     case 'patch':
       return useMutation(
         (payload) => {
-          return axiosInstance.patch(url, payload);
+          return axios.patch(url, payload, axiosConfig);
         },
         {
           onSuccess: () => {
@@ -44,7 +48,7 @@ export const api = (method, url) => {
     case 'delete':
       return useMutation(
         (payload) => {
-          return axiosInstance.delete(url, payload);
+          return axios.delete(url, payload, axiosConfig);
         },
         {
           onSuccess: () => {
@@ -55,8 +59,8 @@ export const api = (method, url) => {
 
     case 'get':
       return useQuery(key, async () => {
-        const res = await axiosInstance.get(url);
-        return res.data;
+        const { data } = await axios.get(url, axiosConfig);
+        return data;
       });
   }
 };

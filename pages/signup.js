@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
-import { AuthLayout } from '../components/layouts/AuthLayout';
+import { RegistrationLayout } from '../components/layouts/RegistrationLayout';
 import { api } from '../hooks/api.hooks';
 import { useUser } from '../hooks/user.hooks';
 
@@ -22,7 +22,7 @@ export default function SignupPage() {
     }
   }, [createUserRes, loginRes]);
   return (
-    <AuthLayout>
+    <RegistrationLayout>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
           className="mx-auto h-12 w-auto"
@@ -224,6 +224,6 @@ export default function SignupPage() {
           )}
         </div>
       </div>
-    </AuthLayout>
+    </RegistrationLayout>
   );
 }

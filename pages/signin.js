@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
-import { AuthLayout } from '../components/layouts/AuthLayout';
+import { RegistrationLayout } from '../components/layouts/RegistrationLayout';
 import { useUser } from '../hooks/user.hooks';
 
 export default function SigninPage() {
@@ -19,7 +19,7 @@ export default function SigninPage() {
     }
   }, [loginRes]);
   return (
-    <AuthLayout>
+    <RegistrationLayout>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
           className="mx-auto h-12 w-auto"
@@ -238,6 +238,6 @@ export default function SigninPage() {
           )}
         </div>
       </div>
-    </AuthLayout>
+    </RegistrationLayout>
   );
 }

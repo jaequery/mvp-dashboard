@@ -334,7 +334,7 @@ export default function UserPage() {
                               </div>
                             </div>
 
-                            <div className="shadow sm:rounded-md sm:overflow-hidden">
+                            {/* <div className="shadow sm:rounded-md sm:overflow-hidden">
                               <div className="bg-white py-6 px-4 space-y-6 sm:p-6">
                                 <div>
                                   <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -482,7 +482,7 @@ export default function UserPage() {
                                   </div>
                                 </fieldset>
                               </div>
-                            </div>
+                            </div> */}
                           </>
                         )}
 

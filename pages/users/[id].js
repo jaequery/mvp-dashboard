@@ -2,9 +2,11 @@ import { Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+import { FilePicker } from '../../components/form/FilePicker';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { Modal } from '../../components/Modal';
 import { api } from '../../hooks/api.hooks';
+import { formatFormikValues } from '../../utils/formatter';
 
 export default function UserPage() {
   const router = useRouter();
@@ -27,19 +29,28 @@ export default function UserPage() {
       setModal(modal);
     }
   }, [saveUserRes.data, saveUserRes.isLoading]);
+
   return (
     <DashboardLayout>
       <main className="flex-1 relative pb-8 z-0 overflow-y-auto">
         {/* Page header */}
-        {userRes.isLoading && <h3>Is loading</h3>}
+
         {!userRes.isLoading && userRes.data.id && (
           <Formik
-            initialValues={{ ...userRes.data }}
+            initialValues={formatFormikValues({ ...userRes.data })}
             onSubmit={(values) => {
               saveUser(values);
             }}
           >
-            {({ getFieldProps, handleSubmit, touched, errors }) => {
+            {({
+              values,
+              getFieldProps,
+              setFieldValue,
+              handleSubmit,
+              touched,
+              errors,
+            }) => {
+              console.log('userRes.data', userRes.data);
               return (
                 <form
                   className="space-y-6"
@@ -183,21 +194,15 @@ export default function UserPage() {
                                       Photo
                                     </label>
                                     <div className="mt-1 flex items-center">
-                                      <span className="inline-block bg-gray-100 rounded-full overflow-hidden h-12 w-12">
-                                        <svg
-                                          className="h-full w-full text-gray-300"
-                                          fill="currentColor"
-                                          viewBox="0 0 24 24"
-                                        >
-                                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                      </span>
-                                      <button
-                                        type="button"
-                                        className="ml-5 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                                      >
-                                        Change
-                                      </button>
+                                      <FilePicker
+                                        buttonLabel={'Change'}
+                                        value={values.picture}
+                                        maxNumberOfFiles={1}
+                                        allowedFileTypes={['image/*']}
+                                        onSuccess={(url) =>
+                                          setFieldValue('picture', url)
+                                        }
+                                      ></FilePicker>
                                     </div>
                                   </div>
                                 </div>

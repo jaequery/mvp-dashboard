@@ -21,10 +21,6 @@ const DashboardLayout = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log('user', user);
-  }, [user]);
-
   const container = useRef(null);
 
   useEffect(() => {
@@ -50,13 +46,6 @@ const DashboardLayout = ({ children }) => {
     document.addEventListener('keyup', handleEscape);
     return () => document.removeEventListener('keyup', handleEscape);
   }, [showProfileMenu]);
-
-  function getActiveMenuClass(path) {
-    const activeClass = 'bg-cyan-800';
-    if (path === '/') {
-      setActiveMenuClass(activeClass);
-    }
-  }
 
   return (
     <>
@@ -427,7 +416,7 @@ const DashboardLayout = ({ children }) => {
 
                 <div className="mt-6 pt-6">
                   <div className="px-2 space-y-1">
-                    <Link href="/settings">
+                    <Link href={`/settings`}>
                       <a
                         href="#"
                         className={`group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md text-white ${

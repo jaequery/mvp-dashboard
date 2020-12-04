@@ -38,7 +38,7 @@ export default function UsersPage() {
                       </dd>
                       <dd className="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
                         <select className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                          <option selected>- filter by status -</option>
+                          <option>- filter by status -</option>
                           <option>Active</option>
                           <option>Inactive</option>
                         </select>
@@ -156,7 +156,7 @@ export default function UsersPage() {
 
                     <tbody className="bg-white divide-y divide-gray-200">
                       {usersRes?.data?.map((user) => (
-                        <tr className="bg-white">
+                        <tr key={user.id} className="bg-white">
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             <div className="flex">
                               <Link href="/users/3">
@@ -191,7 +191,10 @@ export default function UsersPage() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 md:block">
                             {user.roles.map((role) => (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize mr-2">
+                              <span
+                                key={role}
+                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize mr-2"
+                              >
                                 {role}
                               </span>
                             ))}

@@ -5,7 +5,7 @@ export const Modal = ({ show, title, description, buttonText, onClose }) => {
     <>
       {/* This example requires Tailwind CSS v2.0+ */}
       {show && (
-        <div className="fixed z-50 inset-0 overflow-y-auto">
+        <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             {/*
 Background overlay, show/hide based on modal state.
@@ -81,7 +81,7 @@ Leaving: "ease-in duration-200"
               </div>
               <div className="mt-5 sm:mt-6">
                 <button
-                  onClick={onClose}
+                  onClick={() => (show = false)}
                   type="button"
                   className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-cyan-600 text-base font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 sm:text-sm"
                 >

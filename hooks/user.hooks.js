@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { api } from './api.hooks';
+import { useApi } from './api.hooks';
 import Router from 'next/router';
 import Cookies from 'js-cookie';
 
 export function useUser() {
-  const userRes = api('get', '/users/me');
-  const [login, loginRes] = api('post', '/auth/login');
+  const userRes = useApi('get', '/users/me');
+  const [login, loginRes] = useApi('post', '/auth/login');
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -29,4 +29,14 @@ export function useUser() {
   };
 
   return { user, userRes, login, loginRes, logout };
+}
+
+export function useUserForgotPassword() {
+  const [forgot, forgotRes] = useApi('post', '/auth/forgot-password');
+  return { forgot, forgotRes };
+}
+
+export function useUserResetPassword() {
+  const [reset, resetRes] = useApi('post', '/auth/reset-password');
+  return { reset, resetRes };
 }

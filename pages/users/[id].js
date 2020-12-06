@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { FilePicker } from '../../components/form/FilePicker';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { Modal } from '../../components/Modal';
-import { api } from '../../hooks/api.hooks';
+import { useApi } from '../../hooks/api.hooks';
 import { formatFormikValues } from '../../utils/formatter';
 
 export default function UserPage() {
@@ -19,8 +19,8 @@ export default function UserPage() {
     description: 'You have saved successfully',
     buttonText: 'Ok',
   });
-  const [saveUser, saveUserRes] = api('patch', `/users/${router.query.id}`);
-  const userRes = api('get', `/users/${router.query.id}`);
+  const [saveUser, saveUserRes] = useApi('patch', `/users/${router.query.id}`);
+  const userRes = useApi('get', `/users/${router.query.id}`);
 
   useEffect(() => {
     if (!saveUserRes.isLoading && saveUserRes.data) {

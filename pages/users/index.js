@@ -1,12 +1,12 @@
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { format } from 'date-fns';
 import Link from 'next/link';
-import { api } from '../../hooks/api.hooks';
+import { useApi } from '../../hooks/api.hooks';
 import { SlideOver } from '../../components/SlideOver';
 import { useState } from 'react';
 
 export default function UsersPage() {
-  const usersRes = api('get', '/users');
+  const usersRes = useApi('get', '/users');
   const [showAddNew, setShowAddNew] = useState(false);
 
   return (

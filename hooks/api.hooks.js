@@ -10,7 +10,7 @@ const axiosConfig = {
   headers: {},
 };
 
-export const api = (method, url) => {
+export const useApi = (method, url) => {
   method = method.toLowerCase();
   const cache = useQueryCache();
   const key = url;

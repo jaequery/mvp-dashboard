@@ -1,5 +1,18 @@
 import DashboardLayout from '../components/layouts/DashboardLayout';
+import { useApiGet } from '../hooks/api.hooks';
+import { useEffect } from 'react';
 export default function IndexPage() {
+  const [fetch, users] = useApiGet('/users');
+
+  useEffect(() => {
+    fetch();
+  }, []);
+  useEffect(() => {
+    if (users) {
+      console.log('users', users);
+    }
+  }, [users]);
+
   return (
     <DashboardLayout>
       <main className="flex-1 relative pb-8 z-0 overflow-y-auto">
@@ -77,11 +90,11 @@ export default function IndexPage() {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Account balance
+                          New Users Today
                         </dt>
                         <dd>
                           <div className="text-lg font-medium text-gray-900">
-                            $30,659.45
+                            2
                           </div>
                         </dd>
                       </dl>
@@ -125,11 +138,11 @@ export default function IndexPage() {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Account balance
+                          New Users Past 30 days
                         </dt>
                         <dd>
                           <div className="text-lg font-medium text-gray-900">
-                            $30,659.45
+                            0
                           </div>
                         </dd>
                       </dl>
@@ -172,11 +185,11 @@ export default function IndexPage() {
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          Account balance
+                          Total # of Users
                         </dt>
                         <dd>
                           <div className="text-lg font-medium text-gray-900">
-                            $30,659.45
+                            0
                           </div>
                         </dd>
                       </dl>

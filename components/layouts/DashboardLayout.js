@@ -4,26 +4,25 @@ import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import UserContext from '../contexts/UserContext';
-import { useUser } from '../../hooks/user.hooks';
+import { useUser, useUserLogout } from '../../hooks/user.hooks';
 
 const DashboardLayout = ({ children }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [activeMenuClass, setActiveMenuClass] = useState('');
 
-  const { user, logout } = useUser();
+  const [getUser, user] = useUser();
+  const [logout] = useUserLogout();
   const router = useRouter();
 
   useEffect(() => {
+    getUser();
+
     const accessToken = Cookies.get('accessToken');
     console.log('accessToken', accessToken);
     if (!accessToken || accessToken === 'null') {
       router.push('/signin');
     }
   }, []);
-
-  useEffect(() => {
-    console.log('user', user);
-  }, [user]);
 
   const container = useRef(null);
 
@@ -50,13 +49,6 @@ const DashboardLayout = ({ children }) => {
     document.addEventListener('keyup', handleEscape);
     return () => document.removeEventListener('keyup', handleEscape);
   }, [showProfileMenu]);
-
-  function getActiveMenuClass(path) {
-    const activeClass = 'bg-cyan-800';
-    if (path === '/') {
-      setActiveMenuClass(activeClass);
-    }
-  }
 
   return (
     <>
@@ -427,7 +419,7 @@ const DashboardLayout = ({ children }) => {
 
                 <div className="mt-6 pt-6">
                   <div className="px-2 space-y-1">
-                    <Link href="/settings">
+                    <Link href={`/settings`}>
                       <a
                         href="#"
                         className={`group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md text-white ${

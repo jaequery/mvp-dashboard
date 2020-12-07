@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import { RegistrationLayout } from '../components/layouts/RegistrationLayout';
-import { api } from '../hooks/api.hooks';
+import { useApiPost } from '../hooks/api.hooks';
 import { useUser } from '../hooks/user.hooks';
 
 export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState('');
   const { login, loginRes } = useUser();
-  const [createUser, createUserRes] = api('post', '/users');
+  const [createUser, createUserRes] = useApiPost('/users');
   useEffect(() => {
     setError();
     if (createUserRes.error) {
@@ -136,12 +136,14 @@ export default function SignupPage() {
                       </label>
                     </div>
                     <div className="text-sm">
-                      <a
-                        href="#"
-                        className="font-medium text-cyan-600 hover:text-cyan-500"
-                      >
-                        Forgot your password?
-                      </a>
+                      <Link href="/forgot-password">
+                        <a
+                          href="#"
+                          className="font-medium text-cyan-600 hover:text-cyan-500"
+                        >
+                          Forgot your password?
+                        </a>
+                      </Link>
                     </div>
                   </div>
                   <div>
@@ -161,7 +163,7 @@ export default function SignupPage() {
               );
             }}
           </Formik>
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300" />
@@ -216,7 +218,7 @@ export default function SignupPage() {
                 </a>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="text-center mt-4 text-red-400">
           {createUserRes.error && (

@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import { RegistrationLayout } from '../components/layouts/RegistrationLayout';
-import { api } from '../hooks/api.hooks';
+import { useApiPost } from '../hooks/api.hooks';
 import { useUser } from '../hooks/user.hooks';
 
 export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState('');
   const { login, loginRes } = useUser();
-  const [createUser, createUserRes] = useApi('post', '/users');
+  const [createUser, createUserRes] = useApiPost('/users');
   useEffect(() => {
     setError();
     if (createUserRes.error) {

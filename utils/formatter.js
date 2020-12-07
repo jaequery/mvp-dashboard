@@ -8,6 +8,9 @@ export const isUpperCase = (str) => {
 };
 
 export const formatFormikValues = (obj) => {
+  if (!obj) {
+    return false;
+  }
   const res = JSON.parse(
     JSON.stringify(obj, (k, v) => {
       // ignore datetime

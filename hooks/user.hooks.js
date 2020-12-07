@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useApi } from './api.hooks';
-import Router from 'next/router';
 import Cookies from 'js-cookie';
+import Router from 'next/router';
+import { useEffect, useState } from 'react';
+
+import { useApiGet, useApiPost } from './api.hooks';
 
 export function useUser() {
-  const userRes = useApi('get', '/users/me');
-  const [login, loginRes] = useApi('post', '/auth/login');
-  const [user, setUser] = useState(null);
+  const [getUser, userRes] = useApiGet('/users/me');
+  return [getUser, userRes];
+}
 
-  useEffect(() => {
-    if (userRes && userRes.data) {
-      setUser(userRes.data);
-    }
-  }, [userRes]);
+export function useUserLogin() {
+  const [login, loginRes] = useApiPost('/auth/login');
 
   useEffect(() => {
     if (loginRes.isSuccess) {
@@ -23,20 +21,23 @@ export function useUser() {
     }
   }, [loginRes]);
 
+  return [login, loginRes];
+}
+
+export function useUserLogout() {
   const logout = () => {
     Cookies.set('accessToken', null);
     Router.push('/signin');
   };
-
-  return { user, userRes, login, loginRes, logout };
+  return [logout];
 }
 
 export function useUserForgotPassword() {
-  const [forgot, forgotRes] = useApi('post', '/auth/forgot-password');
+  const [forgot, forgotRes] = useApiPost('/auth/forgot-password');
   return { forgot, forgotRes };
 }
 
 export function useUserResetPassword() {
-  const [reset, resetRes] = useApi('post', '/auth/reset-password');
+  const [reset, resetRes] = useApiPost('/auth/reset-password');
   return { reset, resetRes };
 }

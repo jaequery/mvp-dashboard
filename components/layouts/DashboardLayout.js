@@ -4,16 +4,19 @@ import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import UserContext from '../contexts/UserContext';
-import { useUser } from '../../hooks/user.hooks';
+import { useUser, useUserLogout } from '../../hooks/user.hooks';
 
 const DashboardLayout = ({ children }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [activeMenuClass, setActiveMenuClass] = useState('');
 
-  const { user, logout } = useUser();
+  const [getUser, user] = useUser();
+  const [logout] = useUserLogout();
   const router = useRouter();
 
   useEffect(() => {
+    getUser();
+
     const accessToken = Cookies.get('accessToken');
     console.log('accessToken', accessToken);
     if (!accessToken || accessToken === 'null') {

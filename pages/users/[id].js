@@ -1,11 +1,11 @@
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import { FilePicker } from '../../components/form/FilePicker';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { Modal } from '../../components/Modal';
-import { useApi } from '../../hooks/api.hooks';
+import { useApiGet, useApiPatch } from '../../hooks/api.hooks';
 import { formatFormikValues } from '../../utils/formatter';
 
 export default function UserPage() {
@@ -19,23 +19,25 @@ export default function UserPage() {
     description: 'You have saved successfully',
     buttonText: 'Ok',
   });
-  const [saveUser, saveUserRes] = useApi('patch', `/users/${router.query.id}`);
-  const userRes = useApi('get', `/users/${router.query.id}`);
+  const [saveUser, saveUserRes] = useApiPatch(`/users/${router.query.id}`);
+  const [getUser, userRes] = useApiGet(`/users/${router.query.id}`, {
+    enabled: true,
+  });
 
   useEffect(() => {
-    if (!saveUserRes.isLoading && saveUserRes.data) {
+    if (saveUserRes.data) {
       modal.show = true;
       modal.title = 'Success';
       setModal(modal);
     }
-  }, [saveUserRes.data, saveUserRes.isLoading]);
+  }, [saveUserRes.isSuccess]);
 
   return (
     <DashboardLayout>
       <main className="flex-1 relative pb-8 z-0 overflow-y-auto">
         {/* Page header */}
 
-        {!userRes.isLoading && userRes.data.id && (
+        {!userRes?.isLoading && userRes?.data?.id && (
           <Formik
             initialValues={formatFormikValues({ ...userRes.data })}
             onSubmit={(values) => {
@@ -50,7 +52,6 @@ export default function UserPage() {
               touched,
               errors,
             }) => {
-              console.log('userRes.data', userRes.data);
               return (
                 <form
                   className="space-y-6"
@@ -177,12 +178,11 @@ export default function UserPage() {
                                       Email
                                     </label>
                                     <div className="mt-1 rounded-md shadow-sm flex">
-                                      <input
+                                      <Field
                                         type="text"
                                         disabled
                                         name="email"
                                         id="email"
-                                        {...getFieldProps('email')}
                                         autoComplete="email"
                                         className="bg-gray-100 focus:ring-cyan-500 focus:border-cyan-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
                                       />
@@ -228,11 +228,10 @@ export default function UserPage() {
                                     >
                                       First name
                                     </label>
-                                    <input
+                                    <Field
                                       type="text"
                                       name="firstName"
                                       id="firstName"
-                                      {...getFieldProps('firstName')}
                                       autoComplete="given-name"
                                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                     />
@@ -244,11 +243,10 @@ export default function UserPage() {
                                     >
                                       Last name
                                     </label>
-                                    <input
+                                    <Field
                                       type="text"
                                       name="lastName"
                                       id="lastName"
-                                      {...getFieldProps('lastName')}
                                       autoComplete="family-name"
                                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                     />
@@ -261,17 +259,17 @@ export default function UserPage() {
                                     >
                                       Country / Region
                                     </label>
-                                    <select
+                                    <Field
+                                      as="select"
                                       id="country"
                                       name="country"
                                       autoComplete="country"
-                                      {...getFieldProps('country')}
                                       className="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                     >
                                       <option value="US">United States</option>
                                       <option value="CA">Canada</option>
                                       <option value="MX">Mexico</option>
-                                    </select>
+                                    </Field>
                                   </div>
                                   <div className="col-span-6">
                                     <label
@@ -280,11 +278,10 @@ export default function UserPage() {
                                     >
                                       Street address
                                     </label>
-                                    <input
+                                    <Field
                                       type="text"
                                       name="street1"
                                       id="street1"
-                                      {...getFieldProps('street1')}
                                       autoComplete="street-address"
                                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                     />
@@ -296,11 +293,10 @@ export default function UserPage() {
                                     >
                                       City
                                     </label>
-                                    <input
+                                    <Field
                                       type="text"
                                       name="city"
                                       id="city"
-                                      {...getFieldProps('city')}
                                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                     />
                                   </div>
@@ -311,11 +307,10 @@ export default function UserPage() {
                                     >
                                       State / Province
                                     </label>
-                                    <input
+                                    <Field
                                       type="text"
                                       name="state"
                                       id="state"
-                                      {...getFieldProps('state')}
                                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                     />
                                   </div>
@@ -326,11 +321,10 @@ export default function UserPage() {
                                     >
                                       ZIP / Postal
                                     </label>
-                                    <input
+                                    <Field
                                       type="text"
                                       name="zip"
                                       id="zip"
-                                      {...getFieldProps('zip')}
                                       autoComplete="postal-code"
                                       className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                                     />
@@ -338,156 +332,6 @@ export default function UserPage() {
                                 </div>
                               </div>
                             </div>
-
-                            {/* <div className="shadow sm:rounded-md sm:overflow-hidden">
-                              <div className="bg-white py-6 px-4 space-y-6 sm:p-6">
-                                <div>
-                                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                                    Notifications
-                                  </h3>
-                                  <p className="mt-1 text-sm text-gray-500">
-                                    Provide basic informtion about the job. Be
-                                    specific with the job title.
-                                  </p>
-                                </div>
-                                <fieldset>
-                                  <legend className="text-base font-medium text-gray-900">
-                                    By Email
-                                  </legend>
-                                  <div className="mt-4 space-y-4">
-                                    <div className="flex items-start">
-                                      <div className="h-5 flex items-center">
-                                        <input
-                                          id="comments"
-                                          name="comments"
-                                          type="checkbox"
-                                          className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300 rounded"
-                                        />
-                                      </div>
-                                      <div className="ml-3 text-sm">
-                                        <label
-                                          htmlFor="comments"
-                                          className="font-medium text-gray-700"
-                                        >
-                                          Comments
-                                        </label>
-                                        <p className="text-gray-500">
-                                          Get notified when someones posts a
-                                          comment on a posting.
-                                        </p>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div className="flex items-start">
-                                        <div className="h-5 flex items-center">
-                                          <input
-                                            id="candidates"
-                                            name="candidates"
-                                            type="checkbox"
-                                            className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300 rounded"
-                                          />
-                                        </div>
-                                        <div className="ml-3 text-sm">
-                                          <label
-                                            htmlFor="candidates"
-                                            className="font-medium text-gray-700"
-                                          >
-                                            Candidates
-                                          </label>
-                                          <p className="text-gray-500">
-                                            Get notified when a candidate
-                                            applies for a job.
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div className="flex items-start">
-                                        <div className="h-5 flex items-center">
-                                          <input
-                                            id="offers"
-                                            name="offers"
-                                            type="checkbox"
-                                            className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300 rounded"
-                                          />
-                                        </div>
-                                        <div className="ml-3 text-sm">
-                                          <label
-                                            htmlFor="offers"
-                                            className="font-medium text-gray-700"
-                                          >
-                                            Offers
-                                          </label>
-                                          <p className="text-gray-500">
-                                            Get notified when a candidate
-                                            accepts or rejects an offer.
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </fieldset>
-                                <fieldset className="mt-6">
-                                  <legend className="text-base font-medium text-gray-900">
-                                    Push Notifications
-                                  </legend>
-                                  <p className="text-sm text-gray-500">
-                                    These are delivered via SMS to your mobile
-                                    phone.
-                                  </p>
-                                  <div className="mt-4 space-y-4">
-                                    <div className="flex items-center">
-                                      <input
-                                        id="push_everything"
-                                        name="push_notifications"
-                                        type="radio"
-                                        className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
-                                      />
-                                      <label
-                                        htmlFor="push_everything"
-                                        className="ml-3"
-                                      >
-                                        <span className="block text-sm font-medium text-gray-700">
-                                          Everything
-                                        </span>
-                                      </label>
-                                    </div>
-                                    <div className="flex items-center">
-                                      <input
-                                        id="push_email"
-                                        name="push_notifications"
-                                        type="radio"
-                                        className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
-                                      />
-                                      <label
-                                        htmlFor="push_email"
-                                        className="ml-3"
-                                      >
-                                        <span className="block text-sm font-medium text-gray-700">
-                                          Same as email
-                                        </span>
-                                      </label>
-                                    </div>
-                                    <div className="flex items-center">
-                                      <input
-                                        id="push_nothing"
-                                        name="push_notifications"
-                                        type="radio"
-                                        className="focus:ring-cyan-500 h-4 w-4 text-cyan-600 border-gray-300"
-                                      />
-                                      <label
-                                        htmlFor="push_nothing"
-                                        className="ml-3"
-                                      >
-                                        <span className="block text-sm font-medium text-gray-700">
-                                          No push notifications
-                                        </span>
-                                      </label>
-                                    </div>
-                                  </div>
-                                </fieldset>
-                              </div>
-                            </div> */}
                           </>
                         )}
 
@@ -512,14 +356,15 @@ export default function UserPage() {
                                       {/* On: "bg-orange-50 border-orange-200 z-10", Off: "border-gray-200" */}
                                       <div className="relative border rounded-tl-md rounded-tr-md p-4 flex flex-col md:pl-4 md:pr-6 md:grid md:grid-cols-3">
                                         <label className="flex items-center text-sm cursor-pointer">
-                                          <input
-                                            name="pricing_plan"
+                                          <Field
+                                            name="settings.plan"
+                                            value="standard"
                                             type="radio"
                                             className="h-4 w-4 text-cyan-500 cursor-pointer  border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                                             aria-describedby="plan-option-pricing-0 plan-option-limit-0"
                                           />
                                           <span className="ml-3 font-medium text-gray-900">
-                                            Startup
+                                            Standard
                                           </span>
                                         </label>
                                         <p
@@ -538,7 +383,7 @@ export default function UserPage() {
                                           id="plan-option-limit-0"
                                           className="ml-6 pl-1 text-sm md:ml-0 md:pl-0 md:text-right"
                                         >
-                                          Up to 5 active job postings
+                                          Up to 500 active users
                                         </p>
                                       </div>
                                     </li>
@@ -546,15 +391,16 @@ export default function UserPage() {
                                       {/* On: "bg-orange-50 border-orange-200 z-10", Off: "border-gray-200" */}
                                       <div className="relative border border-gray-200 p-4 flex flex-col md:pl-4 md:pr-6 md:grid md:grid-cols-3">
                                         <label className="flex items-center text-sm cursor-pointer">
-                                          <input
-                                            name="pricing_plan"
+                                          <Field
+                                            name="settings.plan"
                                             type="radio"
+                                            value="startup"
                                             className="h-4 w-4 text-cyan-500 cursor-pointer  border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                                             aria-describedby="plan-option-pricing-1 plan-option-limit-1"
                                             defaultChecked
                                           />
                                           <span className="ml-3 font-medium text-gray-900">
-                                            Business
+                                            Startup
                                           </span>
                                         </label>
                                         <p
@@ -573,7 +419,7 @@ export default function UserPage() {
                                           id="plan-option-limit-1"
                                           className="ml-6 pl-1 text-sm md:ml-0 md:pl-0 md:text-right"
                                         >
-                                          Up to 25 active job postings
+                                          Up to 10,000 active users
                                         </p>
                                       </div>
                                     </li>
@@ -581,8 +427,9 @@ export default function UserPage() {
                                       {/* On: "bg-orange-50 border-orange-200 z-10", Off: "border-gray-200" */}
                                       <div className="relative border border-gray-200 rounded-bl-md rounded-br-md p-4 flex flex-col md:pl-4 md:pr-6 md:grid md:grid-cols-3">
                                         <label className="flex items-center text-sm cursor-pointer">
-                                          <input
-                                            name="pricing_plan"
+                                          <Field
+                                            name="settings.plan"
+                                            value="enterprise"
                                             type="radio"
                                             className="h-4 w-4 text-cyan-500 cursor-pointer border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                                             aria-describedby="plan-option-pricing-2 plan-option-limit-2"
@@ -607,7 +454,7 @@ export default function UserPage() {
                                           id="plan-option-limit-2"
                                           className="ml-6 pl-1 text-sm md:ml-0 md:pl-0 md:text-right"
                                         >
-                                          Unlimited active job postings
+                                          Unlimited users
                                         </p>
                                       </div>
                                     </li>
@@ -637,14 +484,6 @@ export default function UserPage() {
                                     </span>
                                   </span>
                                 </div>
-                              </div>
-                              <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button
-                                  type="submit"
-                                  className="bg-cyan-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                                >
-                                  Save
-                                </button>
                               </div>
                             </div>
                           </section>

@@ -6,12 +6,12 @@ import * as Yup from 'yup';
 
 import { RegistrationLayout } from '../components/layouts/RegistrationLayout';
 import { useApiPost } from '../hooks/api.hooks';
-import { useUser } from '../hooks/user.hooks';
+import { useUser, useUserLogin } from '../hooks/user.hooks';
 
 export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState('');
-  const { login, loginRes } = useUser();
+  const [login, loginRes] = useUserLogin();
   const [createUser, createUserRes] = useApiPost('/users');
   useEffect(() => {
     setError();

@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import { RegistrationLayout } from '../components/layouts/RegistrationLayout';
-import { useUser } from '../hooks/user.hooks';
+import { useUserLogin } from '../hooks/user.hooks';
 
 export default function SigninPage() {
   const [error, setError] = useState('');
-  const { user, login, loginRes } = useUser();
+  const [login, loginRes] = useUserLogin();
 
   useEffect(() => {
     setError('');

@@ -10,7 +10,7 @@ import { useUserResetPassword } from '../hooks/user.hooks';
 export default function ForgotPage() {
   const [msg, setMsg] = useState('');
   const router = useRouter();
-  const { reset, resetRes } = useUserResetPassword();
+  const [reset, resetRes] = useUserResetPassword();
 
   useEffect(() => {
     const token = router.query.accessToken;

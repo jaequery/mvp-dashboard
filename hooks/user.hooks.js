@@ -34,10 +34,10 @@ export function useUserLogout() {
 
 export function useUserForgotPassword() {
   const [forgot, forgotRes] = useApiPost('/auth/forgot-password');
-  return { forgot, forgotRes };
+  return [forgot, forgotRes];
 }
 
 export function useUserResetPassword() {
   const [reset, resetRes] = useApiPost('/auth/reset-password');
-  return { reset, resetRes };
+  return [reset, resetRes];
 }

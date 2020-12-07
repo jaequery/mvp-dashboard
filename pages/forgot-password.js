@@ -11,7 +11,7 @@ export default function ForgotPage() {
   const router = useRouter();
   const accessToken = router.query.accessToken;
   const [msg, setMsg] = useState('');
-  const { forgot, forgotRes } = useUserForgotPassword();
+  const [forgot, forgotRes] = useUserForgotPassword();
 
   useEffect(() => {
     if (!forgotRes.isLoading && forgotRes.isSuccess) {
